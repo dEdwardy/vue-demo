@@ -39,10 +39,10 @@
 
 <script>
 /**
- *TODO:
- * file upload ajax
+ *
+ * file upload 
  */
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 import { Icon } from "iview";
 import CustomLoading from "@/components/CustomLoading";
 import store from "@/store";
@@ -73,10 +73,8 @@ export default {
   data() {
     return {};
   },
-  computed:{
-    ...mapGetters([
-      'getFileList'
-    ])
+  computed: {
+    ...mapGetters(["getFileList"])
   },
   methods: {
     handleClickPlusBtn() {
@@ -85,7 +83,7 @@ export default {
     },
     handleDelete(index) {
       this.files.splice(index, 1);
-      store.commit('DELETE_FILE',index)
+      store.commit("DELETE_FILE", index);
       this.$emit("deleteIndx", index);
     },
     async handleInputChange() {
@@ -93,19 +91,18 @@ export default {
       let files = document.getElementById("input").files;
       console.log(files);
       if (files) {
-        // files.forEach(item => {
-        //   let i = _.cloneDeep(item);
-        //   console.warn(i)
-        //   store.commit("ADD_FILE", item);
-        //   console.log(item)
-        // });
-        [].forEach.call(files, _this.readAndPreview);
-        for(let i=0;i<files.length;i++){
-          let params = new FormData();
-          params.append('file',files[i]);
-          let res = await this.$http.Common.uploadImage(this.action,params);
+        if (_this.autoUpload) {
+          for (let i = 0; i < files.length; i++) {
+            let params = new FormData();
+            params.append("file", files[i]);
+            console.log(_this);
+            let  props = { ..._this._props }
+            console.log(props)
+            let res = await _this.$http.Common.uploadImage(props.action, params);
+            console.log(res);
+          }
         }
-
+        [].forEach.call(files, _this.readAndPreview);
       }
     },
     readAndPreview(file) {
@@ -128,7 +125,7 @@ export default {
         _this.$set(data, "src", reader.result);
         let { src, title } = data;
         let file = { src, title };
-        store.commit('ADD_FILE',file);
+        store.commit("ADD_FILE", file);
         _this.$emit("custom", data);
         console.log(data);
       };

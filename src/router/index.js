@@ -6,13 +6,17 @@ const router = new Router({
     routes:[
         {
             path:'/',
-            name:'home',
-            component: () => import('../views/Home')
+            name:'login',
+            component: () => import('../views/Login')
+        },{
+            path:'/login',
+            name:'login',
+            component: () => import('../views/Login')
         },
         {
-            path:'/file',
-            name:'file',
-            component: () => import('../components/FileUpload')
+            path:'/home',
+            name:'home',
+            component: () => import('../views/Home')
         },
         {
             path:'/surprise',

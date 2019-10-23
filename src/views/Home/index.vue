@@ -1,6 +1,6 @@
 <template>
     <div class="Home">
-        <FileUpload/>
+        <FileUpload :action="'/api/files/addFile'"/>
         <div class="btn">
             <Button type="info" @click="jump">create</Button>
         </div>
