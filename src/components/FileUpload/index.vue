@@ -9,7 +9,7 @@
       id="input"
       style="display: none"
     />
-    <div class="box" v-for="(item,index) in files" :key="index">
+    <div class="box" v-for="(item,index) in getFileList" :key="index">
       <div class="content" v-if="item.src && item.src!==''">
         <img :src="item.src" :title="item.title" :alt="item.title" />
         <div class="ok">
@@ -42,6 +42,7 @@
  *TODO:
  * file upload ajax
  */
+import { mapGetters } from 'vuex';
 import { Icon } from "iview";
 import CustomLoading from "@/components/CustomLoading";
 import store from "@/store";
@@ -72,6 +73,11 @@ export default {
   data() {
     return {};
   },
+  computed:{
+    ...mapGetters([
+      'getFileList'
+    ])
+  },
   methods: {
     handleClickPlusBtn() {
       let input = document.getElementById("input");
@@ -82,7 +88,7 @@ export default {
       store.commit('DELETE_FILE',index)
       this.$emit("deleteIndx", index);
     },
-    handleInputChange() {
+    async handleInputChange() {
       let _this = this;
       let files = document.getElementById("input").files;
       console.log(files);
@@ -94,6 +100,12 @@ export default {
         //   console.log(item)
         // });
         [].forEach.call(files, _this.readAndPreview);
+        for(let i=0;i<files.length;i++){
+          let params = new FormData();
+          params.append('file',files[i]);
+          let res = await this.$http.Common.uploadImage(this.action,params);
+        }
+
       }
     },
     readAndPreview(file) {

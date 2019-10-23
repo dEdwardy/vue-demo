@@ -1,14 +1,14 @@
 <template>
   <div class="Surprise">
       <section>
-          <div v-for="(item,key) in imgs" :key="key" :ref="'div'+(key+1)" class="img"></div>
+          <div v-for="(item,key) in getFileList"  :key="key" :ref="'div'+(key+1)" class="img"></div>
       </section>
       <!-- <img src="~assets/imgs/2.jpeg" alt=""> -->
   </div>
 </template>
 
 <script>
-// import { mapGetters } from 'Vuex';
+import { mapGetters } from 'vuex';
 import store from "@/store";
 export default {
     name: 'Surprise',
@@ -26,13 +26,14 @@ export default {
             imgs:[]
         }
     },
-    // computed:{
-    //     ...mapGetters([
-    //         'getFileList'
-    //     ])
-    // },
+    computed:{
+        ...mapGetters([
+            'getFileList'
+        ])
+    },
     mounted(){
-        console.log(store.getters.getFileList)
+        console.warn(this.getFileList)
+        console.warn(store.getters.getFileList)
         this.imgs = [{
                 src:require('./../../assets/imgs/3.jpg')
             },{
@@ -62,7 +63,7 @@ export default {
             });
             console.warn(imgs)
             divs.forEach((item,key) => {
-                item.style.cssText=`background:url(${imgs[key]}) no-repeat;background-size:100% 100%;transform: rotateY(${360*(key)/n}deg) translateZ(500px)`;
+                item.style.cssText=`background:url(${this.getFileList[key].src}) no-repeat;background-size:100% 100%;transform: rotateY(${360*(key)/n}deg) translateZ(500px)`;
             })
         })
     },
