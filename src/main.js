@@ -7,7 +7,12 @@ import 'iview/dist/styles/iview.css';
 import Axios from '@/api'
 import store from './store'
 import Loadsh from 'loadsh'
-import Common  from 'components'
+import Common  from 'components';
+import Echarts from "vue-echarts";
+import 'echarts/lib/echarts'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/chart/bar'
+
 Vue.config.productionTip = false
 Vue.config.devtools = true;
 Vue.use(Icon)
@@ -17,6 +22,7 @@ Vue.use(FormItem)
 Vue.use(Input)
 Vue.use(Radio)
 Vue.use(Common)
+Vue.component('chart',Echarts)
 Vue.prototype.$http = Axios;
 Vue.prototype.$Message = Message;
 global._ = Loadsh;
