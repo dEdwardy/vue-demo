@@ -47,7 +47,7 @@ import { Icon } from "iview";
 import CustomLoading from "@/components/CustomLoading";
 import store from "@/store";
 export default {
-  name: "fileUpload",
+  name: "m-fileUpload",
   components: {
     CustomLoading,
     Icon
