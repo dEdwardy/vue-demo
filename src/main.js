@@ -9,7 +9,7 @@ import store from './store'
 import Loadsh from 'loadsh'
 import Common  from 'components';
 import Echarts from "vue-echarts";
-import 'echarts/lib/echarts'
+import 'echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/bar'
 
