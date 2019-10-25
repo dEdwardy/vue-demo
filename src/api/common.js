@@ -11,4 +11,11 @@ export default class Common{
             .then(res => res)
             .catch(e => e)
     }
+    static getChartData(param){
+        return API.get('/api/chart/'+param)
+            .then(res => res)
+            .catch(e => e)
+    }
+    
+
 }

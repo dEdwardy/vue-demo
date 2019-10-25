@@ -21,8 +21,14 @@ const router = new Router({
             path:'/echarts',
             name:'echarts',
             component: () => import('@/views/Echarts/index.vue')
+        },{
+            path:'*',
+            component: () => import('../views/Login')
         }
     ]
+})
+router.beforeEach((to,from,next) =>{
+    next()
 })
 
 export default router;

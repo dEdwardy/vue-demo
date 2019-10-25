@@ -59,8 +59,11 @@ export default {
                             password:this.formInline.password
                         }
                         console.log(params)
-                        let { data } = await this.$http.Common.login(params);
-                        if(data.success===1){
+                        let res = await this.$http.Common.login(params);
+                        console.log(res)
+                        if(res.data.success===1){
+                            localStorage.setItem('Token',res.data.token)
+                            console.log(res.headers['token'])
                             this.$Message.success('登录成功!');
                             setTimeout(() => {
                                 this.$router.push({

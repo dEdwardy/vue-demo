@@ -1,101 +1,153 @@
 <template>
   <div class="echartsContainer">
-    <div class="hello">
-      <chart ref="chart1" :options="orgOptions" :auto-resize="true"></chart>
-    </div>
+    <echarts class="echarts-view" ref="chart1" :options="lineOption" />
+    <echarts class="echarts-view" :options="barOption" />
   </div>
 </template>
 
 <script>
+import Echarts from "vue-echarts";
+import "echarts/lib/chart/line";
+import "echarts/lib/chart/bar";
 export default {
   name: "Echarts",
   data() {
     return {
-      orgOptions: {}
+      lineOption: {},
+      barOption: {}
     };
   },
+  components: {
+    echarts: Echarts
+  },
   mounted() {
-    console.log(this.$refs.chart1.showLoading);
-    let chart = this.$refs.chart1
-    chart.showLoading({
-       text: 'Loading…',
-        color: '#4ea397',
-        maskColor: 'rgba(255, 255, 255, 0.4)'
-    });
-    setTimeout(() => {
-      this.orgOptions = {
-        loading:true,
+    this.getLineData();
+    this.getBarData();
+  },
+  methods: {
+    async getLineData() {
+      let { data } = await this.$http.Common.getChartData("line");
+      console.log(data);
+      let x = [];
+      let y = [];
+      data.map(i => {
+        x.push(i.date + "月");
+        y.push(i.money);
+      });
+      this.lineOption = {
+        title: {
+          text: "XXXX公司XX部分2019年绩效"
+        },
+        xAxis: {
+          type: "category",
+          data: x
+        },
+        yAxis: {
+          type: "value"
+        },
+        series: [
+          {
+            data: y,
+            type: "line"
+          }
+        ]
+      };
+    },
+    async getBarData() {
+      let { data } = await this.$http.Common.getChartData("bar");
+      let x = Array.from(
+        new Set(
+          data.map(item => {
+            return item.year;
+          })
+        )
+      );
+      let jobs = Array.from(
+        new Set(
+          data.map(item => {
+            return item.job;
+          })
+        )
+      );
+      console.log(jobs);
+      console.log(x);
+      let front = [];
+      let end = [];
+      let yw = [];
+      data.forEach(e => {
+        if (e.job === "前端") {
+          front.push(e.num);
+        }
+        if (e.job === "后台") {
+          end.push(e.num);
+        }
+        if (e.job === "运维") {
+          yw.push(e.num);
+        }
+      });
+
+      console.log(front, end, yw);
+      this.barOption = {
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+            type: "shadow"
+          },
+          formatter:(params) => {
+            let str = `<div style="text-align:center">${params[0].name}年</div>`
+            params.map((i,idx) => {
+              str += `${i.seriesName.slice(0,2)}:${i.value}千<br/>`
+            })
+            // str = params[0].name+'<br/>'+arr[0].seriesName+':'+arr[0].value+'千'+'<br/>'+arr[1].seriesName+':'+arr[0].value+'千'+'<br/>'+arr[0].seriesName+':'+arr[0].value+'千'
+            return str
           }
         },
-        legend: {
-          data: ["利润", "支出", "收入"]
+        title: {
+          text: "2016~2019年软件开发人员数量图"
         },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true
+        legend: {
+          data: jobs
         },
         xAxis: [
           {
-            type: "value"
+            type: "category",
+            data: x,
+            axisTick: {
+              alignWithLabel: true
+            }
           }
         ],
         yAxis: [
           {
-            type: "category",
-            axisTick: { show: false },
-            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+            type: "value"
           }
         ],
         series: [
           {
-            name: "利润",
+            name: "前端人数",
             type: "bar",
-            label: {
-              normal: {
-                show: true,
-                position: "inside"
-              }
-            },
-            data: [200, 170, 240, 244, 200, 220, 210]
+            data: front
           },
           {
-            name: "收入",
+            name: "后台人数",
             type: "bar",
-            stack: "总量",
-            label: {
-              normal: {
-                show: true
-              }
-            },
-            data: [320, 302, 341, 374, 390, 450, 420]
+            data: end
           },
           {
-            name: "支出",
+            name: "运维人数",
             type: "bar",
-            stack: "总量",
-            label: {
-              normal: {
-                show: true,
-                position: "left"
-              }
-            },
-            data: [-120, -132, -101, -134, -190, -230, -210]
+            data: yw
           }
-        ]
+        ],
+        animationDuration: 2000
       };
-    }, 5000);
-
-    chart.hideLoading();
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.echarts-view {
+  margin: 0 auto;
+}
 </style>

@@ -12,6 +12,7 @@ import Echarts from "vue-echarts";
 import 'echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/bar'
+import './mock/index.js'
 
 Vue.config.productionTip = false
 Vue.config.devtools = true;

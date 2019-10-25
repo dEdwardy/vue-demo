@@ -3,8 +3,6 @@
     <div class="customRate-container">
       <span v-for="(star, index) in stars" :key="index" @click="clickStart(index)">
         <Icon :type="star ? off : on" :color="color" :size="size" style=" cursor: pointer;" />
-        <!-- <Icon type="ios-star" />
-        <Icon type="ios-star-outline" />-->
       </span>
     </div>
   </div>
